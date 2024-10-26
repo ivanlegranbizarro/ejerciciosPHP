@@ -1,36 +1,36 @@
 <?php
 
-/* Crea funciones p ara leer y escrivir en un archivo JSON. Usa estas funciones para implementar un libro de visitas simple donde los usuarios puedan dejar mensajes */
+/* Crea funciones para leer y escribir en un archivo JSON. Usa estas funciones para implementar un libro de visitas simple donde los usuarios puedan dejar mensajes */
 
 
-$archivo = 'archivo.json';
+$archivo = 'visitas.json';
 
-function leerMensaje($archivo): array
+function leerArchivo(string $archivo): array
 {
-    $mensajes = file_get_contents($archivo);
-    $json = json_decode($mensajes);
-
-    return $json;
-}
-
-function escribirMensaje(string $archivo): void
-{
-    if (!file_exists($archivo) || filesize($archivo) == 0) {
+    if (!file_exists($archivo) || filesize($archivo == 0)) {
         file_put_contents($archivo, '[]');
     }
 
-    $usuario = readline("Ingresa tu nombre: ");
-    $mensaje = readline("Ingresa tu mensaje: ");
-
-    $json = leerMensaje($archivo);
-    $json[] = [
-        'usuario' => $usuario,
-        'mensaje' => $mensaje
-    ];
-
-    file_put_contents($archivo, json_encode($json));
+    return json_decode(file_get_contents($archivo), true);
 }
 
 
+function escribirArchivo(string $archivo): void
+{
+    $contenido = leerArchivo($archivo);
 
-escribirMensaje($archivo);
+    $autor = readline('Indique su nombre: ');
+    $mensaje =  readline('Deje su mensaje: ');
+
+    if (isset($autor) && isset($mensaje)) {
+        $contenido[] = [
+            'autor' => $autor,
+            'mensaje' => $mensaje
+        ];
+
+        file_put_contents($archivo, json_encode($contenido));
+    }
+}
+
+
+escribirArchivo($archivo);
